@@ -14,8 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.IO;
-
-
+using Path = System.IO.Path;
 
 namespace InventoryManagement
 
@@ -23,6 +22,9 @@ namespace InventoryManagement
     public partial class MainWindow : Window
     {
         ObservableCollection<Nimike> inventory = new ObservableCollection<Nimike>();
+
+       
+
 
         public MainWindow()
         {
@@ -32,7 +34,7 @@ namespace InventoryManagement
         }
 
 
-        private void Lisaa_Nimike(object sender, RoutedEventArgs e)
+        private void BtnLisaa_Nimike(object sender, RoutedEventArgs e)
         {
             string Nimi = itemNameTextBox.Text;
             int Saldo;
@@ -41,6 +43,7 @@ namespace InventoryManagement
                 inventory.Add(new Nimike { Name = Nimi, Quantity = Saldo });
                 itemNameTextBox.Clear();
                 itemQuantityTextBox.Clear();
+
             }
             else
             {
@@ -81,15 +84,20 @@ namespace InventoryManagement
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error exporting inventory to CSV: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Exeliin vienti epäonnistui: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
        
         private void ExportButton_Click(object sender, RoutedEventArgs e)
         {
+            string currentDate = DateTime.Now.ToString("ddMMyyyy");
+
+            // Tiedoston nimi "Inventaario" + päiväys.
+            string fileName = $"Inventaario_{currentDate}.csv";
             // Tiedostopolku CSV-tiedostolle
-            string filePath = "C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\Testi.csv"; // Modify the path as needed
+            string filePath = Path.Combine("C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\", fileName);         
+            //string filePath = "C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\Testi.csv"; 
             ExportToCSV(filePath);
         }
     }

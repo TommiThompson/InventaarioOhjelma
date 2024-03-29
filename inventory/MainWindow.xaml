@@ -15,7 +15,7 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5,38,0,0" Grid.ColumnSpan="2">
             <TextBox x:Name="itemNameTextBox" Width="200" Margin="5"/>
             <TextBox x:Name="itemQuantityTextBox" Width="80" Margin="5"/>
-            <Button Content="Lisää nimike" Click="Lisaa_Nimike" Margin="5" Width="102"/>
+            <Button Content="Lisää nimike" Click="BtnLisaa_Nimike" Margin="5" Width="102"/>
             <Button Content="Poista nimike" Click="Poista_nimike" Margin="5" Width="108"/>
             <Button Content="Vie Exceliin" Click="ExportButton_Click" Margin="5" Width="102"/>
         </StackPanel>
