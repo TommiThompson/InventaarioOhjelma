@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.IO;
 using Path = System.IO.Path;
+using Microsoft.Win32;
+
 
 namespace InventoryManagement
 
@@ -23,14 +25,14 @@ namespace InventoryManagement
     {
         ObservableCollection<Nimike> inventory = new ObservableCollection<Nimike>();
 
-       
+
 
 
         public MainWindow()
         {
             InitializeComponent();
             Inventaario_Lista.ItemsSource = inventory;
-         
+
         }
 
 
@@ -63,7 +65,7 @@ namespace InventoryManagement
             }
         }
 
-  
+
         private void ExportToCSV(string filePath)
         {
             StringBuilder csvContent = new StringBuilder();
@@ -88,7 +90,7 @@ namespace InventoryManagement
             }
         }
 
-       
+
         private void ExportButton_Click(object sender, RoutedEventArgs e)
         {
             string currentDate = DateTime.Now.ToString("ddMMyyyy");
@@ -96,9 +98,93 @@ namespace InventoryManagement
             // Tiedoston nimi "Inventaario" + päiväys.
             string fileName = $"Inventaario_{currentDate}.csv";
             // Tiedostopolku CSV-tiedostolle
-            string filePath = Path.Combine("C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\", fileName);         
+            string filePath = Path.Combine("C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\", fileName);
             //string filePath = "C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\Testi.csv"; 
             ExportToCSV(filePath);
+        }
+        // Vanhan inventaariolistan hakumetodi
+
+        private void loadCSVButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.RestoreDirectory = true;
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    string filePath = openFileDialog.FileName;
+                    List<string[]> data = ReadCSVFile(filePath);
+
+                    PopulateListView(data);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Could not read file. Original error: " + ex.Message);
+                }
+            }
+        }
+
+        private List<string[]> ReadCSVFile(string filePath)
+        {
+            List<string[]> data = new List<string[]>();
+
+            try
+            {
+                using (var reader = new StreamReader(filePath))
+                {
+                    //Skipataan otsikkorivi
+                    reader.ReadLine();
+
+                    while (!reader.EndOfStream)
+                    {
+                        string line = reader.ReadLine();
+              
+                        string[] values = line.Split(';');
+
+                        // Tarkastetaan, onko rivillä vähintään kaksi elementtiä: Nimike ja Saldo
+                        if (values.Length >= 2)
+                        {
+                            data.Add(values);
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Invalid data in line: {line}");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error while reading the file: {ex.Message}");
+            }
+
+            return data;
+        }
+
+
+        private void PopulateListView(List<string[]> data)
+        {
+            inventory.Clear(); // Tyhjennetään ensin näkymä
+
+            foreach (string[] row in data)
+            {
+                string itemName = row[0];
+                string quantityStr = row[1];
+
+                // Try parsing quantity as an integer
+                if (int.TryParse(quantityStr, out int itemQuantity))
+                {
+                    // Add the item to the inventory collection
+                    inventory.Add(new Nimike { Name = itemName, Quantity = itemQuantity });
+                }
+                else
+                {
+                    MessageBox.Show($"Invalid quantity: {quantityStr}");
+                }
+            }
         }
     }
 }
