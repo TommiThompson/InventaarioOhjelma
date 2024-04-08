@@ -19,6 +19,7 @@ using Microsoft.Win32;
 
 
 namespace InventoryManagement
+//Tommi Villanen Ohjelmoinnin näyttö 12.04.2024
 
 {
     public partial class MainWindow : Window
@@ -42,6 +43,7 @@ namespace InventoryManagement
             int Saldo;
             if (int.TryParse(itemQuantityTextBox.Text, out Saldo))
             {
+                
                 inventory.Add(new Nimike { Name = Nimi, Quantity = Saldo });
                 itemNameTextBox.Clear();
                 itemQuantityTextBox.Clear();
@@ -55,13 +57,15 @@ namespace InventoryManagement
 
         private void Poista_nimike(object sender, RoutedEventArgs e)
         {
+            
             if (Inventaario_Lista.SelectedItem != null)
             {
+                
                 inventory.Remove((Nimike)Inventaario_Lista.SelectedItem);
             }
             else
             {
-                MessageBox.Show("Valitse listalta poistettava nimike.");
+                MessageBox.Show("Valitse ensin listalta poistettava nimike.");
             }
         }
 
@@ -145,6 +149,7 @@ namespace InventoryManagement
                         string[] values = line.Split(';');
 
                         // Tarkastetaan, onko rivillä vähintään kaksi elementtiä: Nimike ja Saldo
+                        // Huom! Jatkossa mahdollisesti lisättävä elementtejä esim. hinta
                         if (values.Length >= 2)
                         {
                             data.Add(values);
@@ -174,7 +179,7 @@ namespace InventoryManagement
                 string itemName = row[0];
                 string quantityStr = row[1];
 
-                // Try parsing quantity as an integer
+                // Tarkistetaan saldo kokonaislukuna
                 if (int.TryParse(quantityStr, out int itemQuantity))
                 {
                     // Add the item to the inventory collection
@@ -186,6 +191,46 @@ namespace InventoryManagement
                 }
             }
         }
+        private void UpdateQuantity(Nimike selectedItem, int newQuantity)
+        {
+            // Find the index of the selected item in the ObservableCollection
+            int index = inventory.IndexOf(selectedItem);
+
+            // Tarkistetaan, löytyykö nimike
+            if (index != -1)
+            {
+                // Päivitä valitun nimikkeen saldo
+                inventory[index].Quantity = newQuantity;
+
+                // Siirretään muuttunut nimike ItemsListiin
+                Inventaario_Lista.Items.Refresh();
+            }
+            else
+            {
+                MessageBox.Show("Valitsemaasi nimikettä ei löydy listalta.");
+            }
+        }
+        private void UpdateQuantityButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+            if (Inventaario_Lista.SelectedItem != null)
+            {               
+                if (int.TryParse(newQuantityTextBox.Text, out int newQuantity))
+                {
+                    UpdateQuantity((Nimike)Inventaario_Lista.SelectedItem, newQuantity);
+                    newQuantityTextBox.Clear(); // Tyhjennetään TextBox päivityksen jälkeen.
+                }
+                else
+                {
+                    MessageBox.Show("Syötä ensin uusi saldo 'UUSI SALDO' ruutuun.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Valitse ensin nimike, jonka saldoa haluat muuttaa.");
+            }
+        }
     }
+
 }
 

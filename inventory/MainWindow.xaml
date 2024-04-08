@@ -1,7 +1,7 @@
 ﻿<Window x:Class="InventoryManagement.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Inventory Management" Height="527" Width="785">
+        Title="Inventory Management" Height="527" Width="1009">
     <Grid Margin="0,-13,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="304*"/>
@@ -16,9 +16,11 @@
             <TextBox x:Name="itemNameTextBox" Width="200" Margin="5"/>
             <TextBox x:Name="itemQuantityTextBox" Width="80" Margin="5"/>
             <Button Content="Lisää nimike" Click="BtnLisaa_Nimike" Margin="5" Width="102"/>
-            <Button Content="Poista nimike" Click="Poista_nimike" Margin="5" Width="108"/>
+            <Button x:Name="Poista_Nimike" Content="Poista nimike" Click="Poista_nimike" Margin="5" Width="108"/>
             <Button Content="Vie Exceliin" Click="ExportButton_Click" Margin="5" Width="102"/>
             <Button x:Name="Nayta_lista" Content="Hae inventaariolista" Margin="5" Width="117" Click="loadCSVButton_Click"/>
+            <Button x:Name="Muuta_Saldo" Content="Muuta saldoa" Margin="5" Width="117" Click="UpdateQuantityButton_Click"/>
+            <TextBox x:Name="newQuantityTextBox" Width="80" Margin="5"/>
         </StackPanel>
 
         <ListView Grid.Row="1" x:Name="Inventaario_Lista" Margin="5,5,5,5" Grid.ColumnSpan="2">
@@ -31,5 +33,10 @@
         </ListView>
         <TextBlock HorizontalAlignment="Left" Margin="10,17,0,0" TextWrapping="Wrap" Text="NIMIKE" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="223,17,0,0" TextWrapping="Wrap" Text="MÄÄRÄ" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="365,20,0,0" TextWrapping="Wrap" Text="UUSI SALDO" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="501,-5,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="501,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="501,25,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox Grid.Column="1" Margin="472,197,-120,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
     </Grid>
 </Window>
