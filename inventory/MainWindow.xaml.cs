@@ -24,13 +24,18 @@ namespace InventoryManagement
 {
     public partial class MainWindow : Window
     {
+        //ObservableCollection<Nimike> on .NET-kehyksen tarjoama kokoelmaluokka, joka toteuttaa INotifyCollectionChanged-rajapinnan.
         ObservableCollection<Nimike> inventory = new ObservableCollection<Nimike>();
 
 
-
+        //<Nimike>-niminen inventaario on kokoelma, joka sisältää Nimike-luokan esiintymiä.
+        //Kaikki tähän kokoelmaan tehdyt muutokset näkyvät automaattisesti käyttöliittymässä
+        //ObservableCollectionin antamien ilmoitusten vuoksi.
 
         public MainWindow()
         {
+            //Alustetaan lomake. Esimerkiksi painikkeiden, tapahtumakäsittelijöiden
+            //määrittämiseen käyttöliittymässä.
             InitializeComponent();
             Inventaario_Lista.ItemsSource = inventory;
 
@@ -55,7 +60,7 @@ namespace InventoryManagement
             }
         }
 
-        private void Poista_nimike(object sender, RoutedEventArgs e)
+        private void Poista_nimikeButton_Click(object sender, RoutedEventArgs e)
         {
             
             if (Inventaario_Lista.SelectedItem != null)
@@ -106,9 +111,9 @@ namespace InventoryManagement
             //string filePath = "C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\Testi.csv"; 
             ExportToCSV(filePath);
         }
-        // Vanhan inventaariolistan hakumetodi
+        // Vanhan inventaariolistan hakufunktio
 
-        private void loadCSVButton_Click(object sender, RoutedEventArgs e)
+        private void HaeListaButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
@@ -120,9 +125,9 @@ namespace InventoryManagement
                 try
                 {
                     string filePath = openFileDialog.FileName;
-                    List<string[]> data = ReadCSVFile(filePath);
+                    List<string[]> data = LueCSVtiedosto(filePath);
 
-                    PopulateListView(data);
+                    Taydenna_ListView_Nakyma(data);
                 }
                 catch (Exception ex)
                 {
@@ -131,7 +136,7 @@ namespace InventoryManagement
             }
         }
 
-        private List<string[]> ReadCSVFile(string filePath)
+        private List<string[]> LueCSVtiedosto(string filePath)
         {
             List<string[]> data = new List<string[]>();
 
@@ -170,7 +175,7 @@ namespace InventoryManagement
         }
 
 
-        private void PopulateListView(List<string[]> data)
+        private void Taydenna_ListView_Nakyma(List<string[]> data)
         {
             inventory.Clear(); // Tyhjennetään ensin näkymä
 
@@ -182,7 +187,7 @@ namespace InventoryManagement
                 // Tarkistetaan saldo kokonaislukuna
                 if (int.TryParse(quantityStr, out int itemQuantity))
                 {
-                    // Add the item to the inventory collection
+                    // Lisätään nimike inventaariolistaan
                     inventory.Add(new Nimike { Name = itemName, Quantity = itemQuantity });
                 }
                 else
@@ -191,9 +196,9 @@ namespace InventoryManagement
                 }
             }
         }
-        private void UpdateQuantity(Nimike selectedItem, int newQuantity)
+        private void Paivita_Saldo(Nimike selectedItem, int newQuantity)
         {
-            // Find the index of the selected item in the ObservableCollection
+            // Etsitään kyseinen indeksi ObservableCollectionista
             int index = inventory.IndexOf(selectedItem);
 
             // Tarkistetaan, löytyykö nimike
@@ -210,14 +215,14 @@ namespace InventoryManagement
                 MessageBox.Show("Valitsemaasi nimikettä ei löydy listalta.");
             }
         }
-        private void UpdateQuantityButton_Click(object sender, RoutedEventArgs e)
+        private void Uusi_SaldoButton_Click(object sender, RoutedEventArgs e)
         {
             
             if (Inventaario_Lista.SelectedItem != null)
             {               
                 if (int.TryParse(newQuantityTextBox.Text, out int newQuantity))
                 {
-                    UpdateQuantity((Nimike)Inventaario_Lista.SelectedItem, newQuantity);
+                    Paivita_Saldo((Nimike)Inventaario_Lista.SelectedItem, newQuantity);
                     newQuantityTextBox.Clear(); // Tyhjennetään TextBox päivityksen jälkeen.
                 }
                 else
