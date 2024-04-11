@@ -13,11 +13,11 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5,38,0,0" Grid.ColumnSpan="2">
-            <TextBox x:Name="itemNameTextBox" Width="200" Margin="5"/>
-            <TextBox x:Name="itemQuantityTextBox" Width="80" Margin="5"/>
+            <TextBox x:Name="NimikeTextBox" Width="200" Margin="5"/>
+            <TextBox x:Name="NimikeSaldoTextBox" Width="80" Margin="5"/>
             <Button Content="Lisää nimike" Click="BtnLisaa_Nimike" Margin="5" Width="102"/>
             <Button x:Name="Poista_Nimike" Content="Poista nimike" Click="Poista_nimikeButton_Click" Margin="5" Width="108"/>
-            <Button Content="Vie Exceliin" Click="ExportButton_Click" Margin="5" Width="102"/>
+            <Button Content="Vie Exceliin" Click="VieExceliinButton_Click" Margin="5" Width="102"/>
             <Button x:Name="Nayta_lista" Content="Hae inventaariolista" Margin="5" Width="117" Click="HaeListaButton_Click"/>
             <Button x:Name="Muuta_Saldo" Content="Muuta saldoa" Margin="5" Width="117" Click="Uusi_SaldoButton_Click"/>
             <TextBox x:Name="newQuantityTextBox" Width="80" Margin="5"/>

@@ -20,12 +20,13 @@ using Microsoft.Win32;
 
 namespace InventoryManagement
 //Tommi Villanen Ohjelmoinnin näyttö 12.04.2024
+//Windows-työpöytä sovellus, joka mahdollistaa jatkuvan inventaarion, liitettynä Sharepoint-tietokantaan.
 
 {
     public partial class MainWindow : Window
     {
         //ObservableCollection<Nimike> on .NET-kehyksen tarjoama kokoelmaluokka, joka toteuttaa INotifyCollectionChanged-rajapinnan.
-        ObservableCollection<Nimike> inventory = new ObservableCollection<Nimike>();
+        ObservableCollection<Nimike> inventaario = new ObservableCollection<Nimike>();
 
 
         //<Nimike>-niminen inventaario on kokoelma, joka sisältää Nimike-luokan esiintymiä.
@@ -37,21 +38,21 @@ namespace InventoryManagement
             //Alustetaan lomake. Esimerkiksi painikkeiden, tapahtumakäsittelijöiden
             //määrittämiseen käyttöliittymässä.
             InitializeComponent();
-            Inventaario_Lista.ItemsSource = inventory;
+            Inventaario_Lista.ItemsSource = inventaario;
 
         }
 
 
         private void BtnLisaa_Nimike(object sender, RoutedEventArgs e)
         {
-            string Nimi = itemNameTextBox.Text;
+            string Nimi = NimikeTextBox.Text;
             int Saldo;
-            if (int.TryParse(itemQuantityTextBox.Text, out Saldo))
+            if (int.TryParse(NimikeSaldoTextBox.Text, out Saldo))
             {
                 
-                inventory.Add(new Nimike { Name = Nimi, Quantity = Saldo });
-                itemNameTextBox.Clear();
-                itemQuantityTextBox.Clear();
+                inventaario.Add(new Nimike { Name = Nimi, Quantity = Saldo });
+                NimikeTextBox.Clear();
+                NimikeSaldoTextBox.Clear();
 
             }
             else
@@ -66,7 +67,7 @@ namespace InventoryManagement
             if (Inventaario_Lista.SelectedItem != null)
             {
                 
-                inventory.Remove((Nimike)Inventaario_Lista.SelectedItem);
+                inventaario.Remove((Nimike)Inventaario_Lista.SelectedItem);
             }
             else
             {
@@ -75,22 +76,23 @@ namespace InventoryManagement
         }
 
 
-        private void ExportToCSV(string filePath)
+        private void Luo_CSV(string Tiedosto_Polku)
         {
-            StringBuilder csvContent = new StringBuilder();
+            // Luo StreamReaderin instanssin tiedostoon kirjoittamista varten.
+            StringBuilder CSVSisalto = new StringBuilder();
 
             // Lisää otsikot
-            csvContent.AppendLine("Nimike;Saldo");
+            CSVSisalto.AppendLine("Nimike;Saldo");
 
             // Lisää rivit
-            foreach (var item in inventory)
+            foreach (var item in inventaario)
             {
-                csvContent.AppendLine($"{item.Name};{item.Quantity}");
+                CSVSisalto.AppendLine($"{item.Name};{item.Quantity}");
             }
 
             try
             {
-                File.WriteAllText(filePath, csvContent.ToString());
+                File.WriteAllText(Tiedosto_Polku, CSVSisalto.ToString());
                 MessageBox.Show("Viety Exceliin onnistuneesti.", "Export Successful", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -100,32 +102,34 @@ namespace InventoryManagement
         }
 
 
-        private void ExportButton_Click(object sender, RoutedEventArgs e)
+        private void VieExceliinButton_Click(object sender, RoutedEventArgs e)
         {
             string currentDate = DateTime.Now.ToString("ddMMyyyy");
 
             // Tiedoston nimi "Inventaario" + päiväys.
-            string fileName = $"Inventaario_{currentDate}.csv";
+            string Tiedosto_Nimi = $"Inventaario_{currentDate}.csv";
             // Tiedostopolku CSV-tiedostolle
-            string filePath = Path.Combine("C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\", fileName);
+            string Tiedosto_Polku = Path.Combine("C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\", Tiedosto_Nimi);
             //string filePath = "C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\Testi.csv"; 
-            ExportToCSV(filePath);
+            Luo_CSV(Tiedosto_Polku);
         }
-        // Vanhan inventaariolistan hakufunktio
 
+
+        // Vanhan inventaariolistan hakufunktio
         private void HaeListaButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
-            openFileDialog.FilterIndex = 1;
-            openFileDialog.RestoreDirectory = true;
+            //Avaa valintaikkunan,josta valitaan Excel-tiedosto (csv).
+            OpenFileDialog AvaaExcelValinta = new OpenFileDialog();
+            AvaaExcelValinta.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+            AvaaExcelValinta.FilterIndex = 1;
+            AvaaExcelValinta.RestoreDirectory = true;
 
-            if (openFileDialog.ShowDialog() == true)
+            if (AvaaExcelValinta.ShowDialog() == true)
             {
                 try
                 {
-                    string filePath = openFileDialog.FileName;
-                    List<string[]> data = LueCSVtiedosto(filePath);
+                    string Tiedosto_Polku = AvaaExcelValinta.FileName;
+                    List<string[]> data = LueCSVtiedosto(Tiedosto_Polku);
 
                     Taydenna_ListView_Nakyma(data);
                 }
@@ -136,32 +140,34 @@ namespace InventoryManagement
             }
         }
 
-        private List<string[]> LueCSVtiedosto(string filePath)
+        private List<string[]> LueCSVtiedosto(string Tiedosto_Polku)
         {
             List<string[]> data = new List<string[]>();
 
             try
             {
-                using (var reader = new StreamReader(filePath))
+                // Luo StreamReaderin instanssin tiedostosta lukemista varten.
+                // Use-lause sulkee myös StreamReaderin.
+                using (var reader = new StreamReader(Tiedosto_Polku))
                 {
                     //Skipataan otsikkorivi
                     reader.ReadLine();
 
                     while (!reader.EndOfStream)
                     {
-                        string line = reader.ReadLine();
+                        string rivi = reader.ReadLine();
               
-                        string[] values = line.Split(';');
+                        string[] arvot = rivi.Split(';');
 
                         // Tarkastetaan, onko rivillä vähintään kaksi elementtiä: Nimike ja Saldo
                         // Huom! Jatkossa mahdollisesti lisättävä elementtejä esim. hinta
-                        if (values.Length >= 2)
+                        if (arvot.Length >= 2)
                         {
-                            data.Add(values);
+                            data.Add(arvot);
                         }
                         else
                         {
-                            MessageBox.Show($"Invalid data in line: {line}");
+                            MessageBox.Show($"Invalid data in line: {rivi}");
                         }
                     }
                 }
@@ -177,35 +183,36 @@ namespace InventoryManagement
 
         private void Taydenna_ListView_Nakyma(List<string[]> data)
         {
-            inventory.Clear(); // Tyhjennetään ensin näkymä
+            inventaario.Clear(); // Tyhjennetään ensin näkymä
 
             foreach (string[] row in data)
             {
-                string itemName = row[0];
-                string quantityStr = row[1];
+                string Nimike_Nimi = row[0];
+                string Nimike_Saldo = row[1];
 
                 // Tarkistetaan saldo kokonaislukuna
-                if (int.TryParse(quantityStr, out int itemQuantity))
+                if (int.TryParse(Nimike_Saldo, out int itemQuantity))
                 {
                     // Lisätään nimike inventaariolistaan
-                    inventory.Add(new Nimike { Name = itemName, Quantity = itemQuantity });
+                    inventaario.Add(new Nimike { Name = Nimike_Nimi, Quantity = itemQuantity });
                 }
                 else
                 {
-                    MessageBox.Show($"Invalid quantity: {quantityStr}");
+                    MessageBox.Show($"Invalid quantity: {Nimike_Saldo}");
                 }
             }
         }
-        private void Paivita_Saldo(Nimike selectedItem, int newQuantity)
+        public int Uusi_Saldo;
+        private void Paivita_Saldo(Nimike Valittu_Nimike, int Uusi_Saldo)
         {
             // Etsitään kyseinen indeksi ObservableCollectionista
-            int index = inventory.IndexOf(selectedItem);
+            int indeksi = inventaario.IndexOf(Valittu_Nimike);
 
             // Tarkistetaan, löytyykö nimike
-            if (index != -1)
+            if (indeksi != -1)
             {
                 // Päivitä valitun nimikkeen saldo
-                inventory[index].Quantity = newQuantity;
+                inventaario[indeksi].Quantity = Uusi_Saldo;
 
                 // Siirretään muuttunut nimike ItemsListiin
                 Inventaario_Lista.Items.Refresh();
@@ -220,9 +227,9 @@ namespace InventoryManagement
             
             if (Inventaario_Lista.SelectedItem != null)
             {               
-                if (int.TryParse(newQuantityTextBox.Text, out int newQuantity))
+                if (int.TryParse(newQuantityTextBox.Text, out int Uusi_Saldo))
                 {
-                    Paivita_Saldo((Nimike)Inventaario_Lista.SelectedItem, newQuantity);
+                    Paivita_Saldo((Nimike)Inventaario_Lista.SelectedItem, Uusi_Saldo);
                     newQuantityTextBox.Clear(); // Tyhjennetään TextBox päivityksen jälkeen.
                 }
                 else
