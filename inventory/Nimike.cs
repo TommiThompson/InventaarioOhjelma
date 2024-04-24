@@ -12,6 +12,10 @@ namespace InventoryManagement
     {
         public string Name { get; set; }
         public int Quantity { get; set; }
+
+        public string Code { get; set; }
+
+        public string Units { get; set; }
         //public float Price { get; set; }
     }
 }

@@ -45,19 +45,34 @@ namespace InventoryManagement
 
         private void BtnLisaa_Nimike(object sender, RoutedEventArgs e)
         {
+            string Koodi = KoodiTextBox.Text;
             string Nimi = NimikeTextBox.Text;
             int Saldo;
-            if (int.TryParse(NimikeSaldoTextBox.Text, out Saldo))
+            string Yksikko = YksikkoTextBox.Text;
+            if (string.IsNullOrWhiteSpace(Nimi))
             {
-                
-                inventaario.Add(new Nimike { Name = Nimi, Quantity = Saldo });
-                NimikeTextBox.Clear();
-                NimikeSaldoTextBox.Clear();
+                MessageBox.Show("Nimike- ja Saldo kentät ovat pakollisia.");
+
+                // Muuta tekstilaatikon väriä, jos arvoja ei ole syötetty
+                NimikeTextBox.Background = Brushes.Orange;
+                NimikeSaldoTextBox.Background = Brushes.Orange;
+                return;
+            }
+            if (int.TryParse(NimikeSaldoTextBox.Text, out Saldo))
+            {              
+                    inventaario.Add(new Nimike { Code = Koodi, Name = Nimi, Quantity = Saldo, Units = Yksikko });
+                    NimikeTextBox.Clear();
+                    NimikeSaldoTextBox.Clear();
+                    KoodiTextBox.Clear();
+                    YksikkoTextBox.Clear();
+                    NimikeSaldoTextBox.Background = Brushes.White;
+                    NimikeTextBox.Background = Brushes.White;
 
             }
             else
             {
-                MessageBox.Show("Kirjoita määrä kokonaislukuna.");
+                MessageBox.Show("Kirjoita saldon määrä kokonaislukuna.");
+                NimikeSaldoTextBox.Background = Brushes.Orange;
             }
         }
 
@@ -65,8 +80,7 @@ namespace InventoryManagement
         {
             
             if (Inventaario_Lista.SelectedItem != null)
-            {
-                
+            {              
                 inventaario.Remove((Nimike)Inventaario_Lista.SelectedItem);
             }
             else
@@ -82,12 +96,12 @@ namespace InventoryManagement
             StringBuilder CSVSisalto = new StringBuilder();
 
             // Lisää otsikot
-            CSVSisalto.AppendLine("Nimike;Saldo");
+            CSVSisalto.AppendLine("Koodi;Nimike;Saldo;Yksikkö");
 
             // Lisää rivit
             foreach (var item in inventaario)
             {
-                CSVSisalto.AppendLine($"{item.Name};{item.Quantity}");
+                CSVSisalto.AppendLine($"{item.Code};{item.Name};{item.Quantity};{item.Units}");
             }
 
             try
@@ -123,6 +137,8 @@ namespace InventoryManagement
             AvaaExcelValinta.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
             AvaaExcelValinta.FilterIndex = 1;
             AvaaExcelValinta.RestoreDirectory = true;
+            NimikeSaldoTextBox.Background = Brushes.White;
+            NimikeTextBox.Background = Brushes.White;
 
             if (AvaaExcelValinta.ShowDialog() == true)
             {
@@ -142,13 +158,13 @@ namespace InventoryManagement
 
         private List<string[]> LueCSVtiedosto(string Tiedosto_Polku)
         {
-            List<string[]> data = new List<string[]>();
+                List<string[]> data = new List<string[]>();
 
             try
             {
                 // Luo StreamReaderin instanssin tiedostosta lukemista varten.
                 // Use-lause sulkee myös StreamReaderin.
-                using (var reader = new StreamReader(Tiedosto_Polku))
+                using (var reader = new StreamReader(Tiedosto_Polku, Encoding.UTF8))
                 {
                     //Skipataan otsikkorivi
                     reader.ReadLine();
@@ -161,7 +177,8 @@ namespace InventoryManagement
 
                         // Tarkastetaan, onko rivillä vähintään kaksi elementtiä: Nimike ja Saldo
                         // Huom! Jatkossa mahdollisesti lisättävä elementtejä esim. hinta
-                        if (arvot.Length >= 2)
+                        // Lisättiin kentät 'koodi' ja 'yksikkö'
+                        if (arvot.Length >= 4)
                         {
                             data.Add(arvot);
                         }
@@ -187,14 +204,16 @@ namespace InventoryManagement
 
             foreach (string[] row in data)
             {
-                string Nimike_Nimi = row[0];
-                string Nimike_Saldo = row[1];
+                string Nimike_Koodi = row[0];
+                string Nimike_Nimi = row[1];
+                string Nimike_Saldo = row[2];
+                string Nimike_Yksikko = row[3];
 
                 // Tarkistetaan saldo kokonaislukuna
                 if (int.TryParse(Nimike_Saldo, out int itemQuantity))
                 {
                     // Lisätään nimike inventaariolistaan
-                    inventaario.Add(new Nimike { Name = Nimike_Nimi, Quantity = itemQuantity });
+                    inventaario.Add(new Nimike { Code = Nimike_Koodi, Name = Nimike_Nimi, Quantity = itemQuantity, Units = Nimike_Yksikko });
                 }
                 else
                 {
@@ -226,15 +245,18 @@ namespace InventoryManagement
         {
             
             if (Inventaario_Lista.SelectedItem != null)
-            {               
-                if (int.TryParse(newQuantityTextBox.Text, out int Uusi_Saldo))
+                
+            {
+                if (int.TryParse(NimikeSaldoTextBox.Text, out int Uusi_Saldo))
                 {
                     Paivita_Saldo((Nimike)Inventaario_Lista.SelectedItem, Uusi_Saldo);
-                    newQuantityTextBox.Clear(); // Tyhjennetään TextBox päivityksen jälkeen.
+                    NimikeSaldoTextBox.Clear(); // Tyhjennetään TextBox päivityksen jälkeen.
+                    NimikeSaldoTextBox.Background = Brushes.Orange;
                 }
                 else
                 {
-                    MessageBox.Show("Syötä ensin uusi saldo 'UUSI SALDO' ruutuun.");
+                    MessageBox.Show("Syötä ensin uusi saldo 'SALDO' ruutuun.");
+                    NimikeSaldoTextBox.Background = Brushes.Orange;
                 }
             }
             else
@@ -242,7 +264,40 @@ namespace InventoryManagement
                 MessageBox.Show("Valitse ensin nimike, jonka saldoa haluat muuttaa.");
             }
         }
-    }
+        private void ClearListViewButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Kutsutaan clear-metodia tyhjentämään kenttiä. Lisäksi palautetaan kentän väri.
+            inventaario.Clear();
+            NimikeTextBox.Clear();
+            NimikeSaldoTextBox.Clear();
+            KoodiTextBox.Clear();
+            YksikkoTextBox.Clear();
+            NimikeSaldoTextBox.Background = Brushes.White;
+            NimikeTextBox.Background = Brushes.White;
+        }
+        private void Inventaario_Lista_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Inventaario_Lista.SelectedItem != null)
+            {
+                Nimike selectedNimike = (Nimike)Inventaario_Lista.SelectedItem;
 
+                // Näytetään SALDO-ruudussa nykyinen listassa oleva saldo.
+                NimikeSaldoTextBox.Text = selectedNimike.Quantity.ToString();
+                Poista_Nimike.Background = Brushes.Orange;// Muutetaan buttonien ja tekstilaatikon väri valittaessa rivi.
+                Muuta_Saldo.Background = Brushes.Orange;
+                NimikeSaldoTextBox.Background = Brushes.Orange;
+            }
+            else
+            {
+                Poista_Nimike.Background = Brushes.LightGray; // Muutetaan takaisin oletusväriksi, jossei riviä valita.
+                Muuta_Saldo.Background = Brushes.LightGray;
+                NimikeSaldoTextBox.Background = Brushes.White;
+            }
+        }
+
+    }
+       
+    
 }
+
 
