@@ -7,4 +7,16 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="800px-Transvalin_logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="800px-Transvalin_logo.png" />
+  </ItemGroup>
+
 </Project>

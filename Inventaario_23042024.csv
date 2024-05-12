@@ -1,10 +1,10 @@
-Koodi;Nimike;Saldo;YksikkÃ¶
+Koodi;Nimike;Saldo;Yksikkö
 922123;MUOVIKELMU 0.09x1500x3000 MM ;700;kg
-922125;MUOVIKELMU 0,05*1250*5000 mm;25;kg
+922125;MUOVIKELMU 0,05*1250*5000 mm;0;kg
 9600890;PE-KALVO VALKOINEN;200;kg
 9600313;TEIPPI 51662 50x60 VAROITUSTEKSTIT JA SUUNTANUOLET;30;kpl
-926404;TERï¿½SVANNE 16x0.5 MM  BCL MAALATTU ;25;kg
-8107645;KULJETUSTUKI;2345;kpl
+926404;TERÄSVANNE 16x0.5 MM  BCL MAALATTU ;25;kg
+8107645;KULJETUSTUKI;3420;kpl
 957105;KULJETUSKIINNIKE;4700;kpl
 926206;KOLLITARRA;17000;kpl
 901111;Lauta 19*100;430;m
@@ -14,22 +14,22 @@ Koodi;Nimike;Saldo;YksikkÃ¶
 0;ruuvi 6,3*25;4;LTK
 0;ruuvi 6,3*40;2000;kpl
 0;ruuvi 5*35;6000;kpl
-0;Poraruuvi wurth 6*85;1;kpl
+0;Poraruuvi wurth 6*85;0;kpl
 0;Levyruuvi 6,3*19;1600;kpl
 0;Hakanen N-sarja 50x11 + 44mm Senco;9;ltk
 0;Senco 4,5*75;12;ltk
 0;Senco 4,2*45;14;ltk
-0;Hakanen R-140 10x10,7;1;ltk
-9602361;Varoitus sidonta-teippi;1;rul
+0;Hakanen R-140 10x10,7;0;ltk
+9602361;Varoitus sidonta-teippi;0;rul
 0;GLAS-varoitusteippi;6;rll
 0;Ketjunkuva-teippi;3;rul
-S/929;Vï¿½LIPUU 47*100;218;kpl
-S/926;Vï¿½LIPUU 32*100;430;kpl
-S/925;Vï¿½LIPUU 19*100;270;kpl
+S/929;VÄLIPUU 47*100;218;kpl
+S/926;VÄLIPUU 32*100;430;kpl
+S/925;VÄLIPUU 19*100;270;kpl
 0;L-lista PA-HU 2040mm;2210;kpl
 0;L-lista PA-HU 2220mm;940;kpl
-0;PAHVIKULMA 4 X 60 X 60 X 600 MM;1;kpl
+0;PAHVIKULMA 4 X 60 X 60 X 600 MM;0;kpl
 0;SUKSI (LYHYT);90;kpl
-0;SUKSI (PITKï¿½);60;kpl
-0;Pï¿½ï¿½TY;52;kpl
+0;SUKSI (PITKÄ);60;kpl
+0;PÄÄTY;52;kpl
 926119;Teippi 38 mm kirkas;34;kpl
