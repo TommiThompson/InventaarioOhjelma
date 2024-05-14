@@ -16,18 +16,27 @@ using System.Collections.ObjectModel;
 using System.IO;
 using Path = System.IO.Path;
 using Microsoft.Win32;
-using System.Threading.Tasks;
+
 
 
 
 
 namespace InventoryManagement
 //Tommi Villanen Ohjelmoinnin näyttö 12.04.2024
+//Tommi Villanen Ohjelmistokehityksen näyttö
 //Windows-työpöytä sovellus, joka mahdollistaa jatkuvan inventaarion, liitettynä Sharepoint-tietokantaan.
 
 {
     public partial class MainWindow : Window
     {
+        public string currentDate = DateTime.Now.ToString("ddMMyyyy");
+        public string Tiedosto_Nimi { get; set; }
+        public string Tiedosto_Polku { get; set; }
+        private readonly string oletusPolkuSM = "C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\SM\\";
+        private readonly string oletusPolkuPI = "C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\PI\\";
+        private readonly string oletusPolkuKISALLINTIE = "C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\KISALLINTIE\\";
+        private readonly string oletusPolkuMUUTLISTAT = "C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\MUUT LISTAT\\";
+
         //ObservableCollection<Nimike> on .NET-kehyksen tarjoama kokoelmaluokka, joka toteuttaa INotifyCollectionChanged-rajapinnan.
         ObservableCollection<Nimike> inventaario = new ObservableCollection<Nimike>();
 
@@ -53,12 +62,13 @@ namespace InventoryManagement
             string Yksikko = YksikkoTextBox.Text;
             if (string.IsNullOrWhiteSpace(Nimi))
             {
-                MessageBox.Show("Nimike- ja Saldo kentät ovat pakollisia.");
+                MessageBox.Show("Nimike-, Saldo-, ja yksikkökentät ovat pakollisia.");
 
 
                 // Muuta tekstilaatikon väriä, jos arvoja ei ole syötetty
                 NimikeTextBox.Background = Brushes.Orange;
                 NimikeSaldoTextBox.Background = Brushes.Orange;
+                YksikkoTextBox.Background = Brushes.Orange;
                 return;
             }
             if (int.TryParse(NimikeSaldoTextBox.Text, out Saldo))
@@ -69,9 +79,12 @@ namespace InventoryManagement
                 KoodiTextBox.Clear();
                 YksikkoTextBox.Clear();
                 NimikeSaldoTextBox.Background = Brushes.White;
-                NimikeTextBox.Background = Brushes.White;                           
+                NimikeTextBox.Background = Brushes.White;
                 Muuta_Saldo.Background = Brushes.LightGray;
-                
+                LisaaSaldoButton.Background = Brushes.LightGray;
+                Muuta_Saldo.BorderBrush = Brushes.Orange;
+                LisaaSaldoButton.BorderBrush = Brushes.Orange;
+
                 VieExceliinButton_Click(sender, e);
 
             }
@@ -143,51 +156,49 @@ namespace InventoryManagement
                 return;
             }
 
-            string currentDate = DateTime.Now.ToString("ddMMyyyy");
+            if (string.IsNullOrEmpty(Tiedosto_Polku))
+            {
+                MessageBox.Show("Tiedostopolku on tyhjä.");
+                return;
+            }
 
-            // Tiedoston nimi "Inventaario" + päiväys.
-            string Tiedosto_Nimi = $"SM_Inventaario_{currentDate}.csv";
-            
-            // Tiedostopolku CSV-tiedostolle
-            string Tiedosto_Polku = Path.Combine("C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\SM\\", Tiedosto_Nimi);
-            
-            //string filePath = "C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\Testi.csv"; 
             Luo_CSV(Tiedosto_Polku, Encoding.UTF8);
             Lisaa_nimike.Background = Brushes.LightGray;
             NimikeTextBox.Background = Brushes.White;
-
+            YksikkoTextBox.Background = Brushes.White;
+            Muuta_Saldo.BorderBrush = Brushes.Orange;
+            LisaaSaldoButton.BorderBrush = Brushes.Orange;
         }
-
-
-        // Vanhan inventaariolistan hakufunktio
-        private void HaeListaButton_Click(object sender, RoutedEventArgs? e)
+        private void Tallenna_Uusi_Lista(object sender, RoutedEventArgs e)
         {
-            //Avaa valintaikkunan,josta valitaan Excel-tiedosto (csv).
-            OpenFileDialog AvaaExcelValinta = new OpenFileDialog();
-            AvaaExcelValinta.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
-            AvaaExcelValinta.FilterIndex = 1;
-            AvaaExcelValinta.RestoreDirectory = true;
-            NimikeSaldoTextBox.Background = Brushes.White;
-            NimikeTextBox.Background = Brushes.White;
-            
-            
+            // Avataan valinta ikkuna, johon käyttäjä voi luoda uuden tiedoston.
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+            saveFileDialog.InitialDirectory = oletusPolkuMUUTLISTAT;
 
-            if (AvaaExcelValinta.ShowDialog() == true)
+            if (saveFileDialog.ShowDialog() == true)
             {
+                string filePath = Path.Combine("C:\\Users\\Tommi Villanen\\source\\repos\\inventory\\MUUT LISTAT\\", saveFileDialog.FileName);
+
+                // Luodaan uusi CSV-tiedosto valittuun polkuun.
                 try
                 {
-                    string Tiedosto_Polku = AvaaExcelValinta.FileName;
-                    List<string[]> data = LueCSVtiedosto(Tiedosto_Polku, Encoding.UTF8);
+                    using (StreamWriter sw = new StreamWriter(filePath))
+                    {
+                        // Lisää otsikkorivi.
+                        sw.WriteLine("Koodi;Nimike;Saldo;Yksikkö;Hälytysraja");
+                    }
 
-                    Taydenna_ListView_Nakyma(data);
+                    MessageBox.Show("Luotu uusi Excel-tiedosto.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: Could not read file. Original error: " + ex.Message);
+                    // Virheviesti.
+                    MessageBox.Show("Virhe luodessa uutta tiedostoa.: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
-        
+
 
         private List<string[]> LueCSVtiedosto(string Tiedosto_Polku, Encoding encoding)
         {
@@ -256,12 +267,12 @@ namespace InventoryManagement
                             {
                                 // Jos saldo on pienempi kuin asetettu hälytysraja, muuttuu rivi punaiseksi.
                                 backgroundColor = Brushes.Red;
-                            }
-         
+                            }                           
+
                         }
                         else
                         {
-                            MessageBox.Show($"Invalid alarm value: {Nimike_Halytysraja}");
+                            Nimike_Halytysraja = "0";
                         }
 
                         // Lisätään nimike inventaariolistaan
@@ -287,14 +298,14 @@ namespace InventoryManagement
         }
 
         public int Uusi_Saldo;
-        //public int Vanha_Saldo;
+
 
 
         private void Paivita_Saldo(Nimike Valittu_Nimike, int Uusi_Saldo)
         {
             // Etsitään kyseinen indeksi ObservableCollectionista
             int indeksi = inventaario.IndexOf(Valittu_Nimike);
-            
+
             // Tarkistetaan, löytyykö nimike
             if (indeksi != -1)
             {
@@ -340,7 +351,7 @@ namespace InventoryManagement
                     // Ensure saldo is greater than or equal to the reduction
                     if (selectedNimike.Quantity >= Vahennys)
                     {
-                        // Vähennetäänb syötetty saldo nykyisestä saldosta.
+                        // Vähennetään syötetty saldo nykyisestä saldosta.
                         int Uusi_Saldo = selectedNimike.Quantity - Vahennys;
 
                         // Päivitä saldo
@@ -350,7 +361,7 @@ namespace InventoryManagement
                         NimikeSaldoTextBox.Background = Brushes.White;
                         LisaaSaldoButton.Background = Brushes.LightGray;
 
-                        // Trigger export to Excel
+                        // Kutsutaan Exceliin tallennus funktiota.
                         VieExceliinButton_Click(sender, e);
                     }
                     else
@@ -412,9 +423,12 @@ namespace InventoryManagement
             NimikeSaldoTextBox.Background = Brushes.White;
             NimikeTextBox.Background = Brushes.White;
             Lisaa_nimike.Background = Brushes.LightGray;
+            YksikkoTextBox.Background = Brushes.White;
             SaldoTextBox.Clear();
             LisaaSaldoButton.Background = Brushes.LightGray;
-            Inv_Alueet.SelectedItem = null;
+            Muuta_Saldo.BorderBrush = Brushes.Orange;
+            LisaaSaldoButton.BorderBrush = Brushes.Orange;
+            comboBox1.SelectedItem = null;
         }
         private void Inventaario_Lista_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -427,12 +441,14 @@ namespace InventoryManagement
             {
                 Nimike selectedNimike = (Nimike)Inventaario_Lista.SelectedItem;
 
+
                 SaldoTextBox.Text = selectedNimike.Quantity.ToString();
-                Poista_Nimike.Background = Brushes.Orange;               
+                Poista_Nimike.Background = Brushes.Orange;
                 NimikeSaldoTextBox.Background = Brushes.Orange;
                 NimikeTextBox.Background = Brushes.White;
                 Lisaa_nimike.Background = Brushes.LightGray;
-                selectedNimike.BackgroundColor = Brushes.LightGreen;
+                YksikkoTextBox.Background = Brushes.White;
+
             }
             else
             {
@@ -452,13 +468,28 @@ namespace InventoryManagement
             Poista_Nimike.Background = Brushes.LightGray; // Vaihdetaan väri oletusväriksi, kun saldoruutu valitaan.
             NimikeSaldoTextBox.Background = Brushes.LightGreen;
             Muuta_Saldo.Background = Brushes.Red;
+            Muuta_Saldo.BorderBrush = Brushes.White;
             LisaaSaldoButton.Background = Brushes.Green;
+            LisaaSaldoButton.BorderBrush = Brushes.White;
+            NimikeTextBox.Background = Brushes.White;
+            YksikkoTextBox.Background = Brushes.White;
+        }
+        private void NimikeTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Poista_Nimike.Background = Brushes.LightGray; // Vaihdetaan väri oletusväriksi, kun saldoruutu valitaan.
+            NimikeSaldoTextBox.Background = Brushes.White;
+            Muuta_Saldo.Background = Brushes.LightGray;
+            Muuta_Saldo.BorderBrush = Brushes.Orange;
+            LisaaSaldoButton.Background = Brushes.LightGray;
+            LisaaSaldoButton.BorderBrush = Brushes.Orange;
+            NimikeTextBox.Background = Brushes.White;
+            YksikkoTextBox.Background = Brushes.White;
         }
 
         private void ShowInfobutton_Click(object sender, RoutedEventArgs e) // Annettaan käyttäjälle infoa, kuinka ohjelmaa käytetään.
         {
             MessageBox.Show("Valitse ensin hiirellä klikkaamalla listalta rivi. Tämän jälkeen voit joko muuttaa saldoa syöttämällä " +
-                "uuden saldon 'SALDO' ruutuun ja klikkaamalla MUUTA SALDOA '+' tai '-' -painikkeita riippuen siitä haluatko lisätä tai vähentää saldoa." + 
+                "uuden saldon 'SALDO' ruutuun ja klikkaamalla MUUTA SALDOA '+' tai '-' -painikkeita riippuen siitä haluatko lisätä tai vähentää saldoa." +
                 "Vaihtoehtoisesti voit poistaa nimikkeen 'POISTA NIMIKE'-painikkeella." +
                 "Voit myös lisätä nimikkeen syöttämällä tiedot ainakin kenttiin 'NIMIKE', 'SALDO' ja painamalla 'LISÄÄ NIMIKE'-painiketta");
         }
@@ -468,15 +499,74 @@ namespace InventoryManagement
         {
             ComboBox comboBox = (ComboBox)sender;
 
-            // Tarkistetaan onko listalta valittu itemi ja onko se "SM"
-            if (comboBox.SelectedItem != null && ((ComboBoxItem)comboBox.SelectedItem).Content.ToString() == "SM")
+            if (comboBox.SelectedItem != null)
             {
-                // Kutsutaan metodia, kun Comboboxista valitaan 'SM'.
-                HaeListaButton_Click(sender, null);
-            }
+                string selectedValue = ((ComboBoxItem)comboBox.SelectedItem).Content.ToString();
 
+                switch (selectedValue)
+                {
+                    case "PI":
+                        Tyhjenna_NakymaButton_Click(sender, e);
+                        Tiedosto_Nimi = "PI_Inventaario.csv";
+                        Tiedosto_Polku = Path.Combine(oletusPolkuPI, Tiedosto_Nimi);
+                        break;
+                    case "SM":
+                        Tyhjenna_NakymaButton_Click(sender, e);
+                        Tiedosto_Nimi = "SM_Inventaario.csv";
+                        Tiedosto_Polku = Path.Combine(oletusPolkuSM, Tiedosto_Nimi);
+                        break;
+                    case "KISÄLLINTIE":
+                        Tyhjenna_NakymaButton_Click(sender, e);
+                        Tiedosto_Nimi = "KISALLINTIE_Inventaario.csv";
+                        Tiedosto_Polku = Path.Combine(oletusPolkuKISALLINTIE, Tiedosto_Nimi);
+                        break;
+                    case "MUUT LISTAT":
+                        Tyhjenna_NakymaButton_Click(sender, e);
+                        OpenFileDialog openFileDialog = new OpenFileDialog();
+                        openFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+                        openFileDialog.InitialDirectory = oletusPolkuMUUTLISTAT; // Oletus tallennuspaikka.
+
+                        if (openFileDialog.ShowDialog() == true)
+                        {
+                            Tiedosto_Nimi = Path.GetFileName(openFileDialog.FileName);
+                            Tiedosto_Polku = openFileDialog.FileName;
+                        }
+                        else
+                        {
+                            return;
+                        }
+                        break;
+                    default:
+                        Tyhjenna_NakymaButton_Click(sender, e);
+                        break;
+                }
+
+                LoadDataFromSelectedFilePath(Tiedosto_Polku); // Parametrinä valittu (CASE) tiedostopolku ja tiedosto.
+            }
         }
 
+        private void LoadDataFromSelectedFilePath(string filePath)
+        {
+            // Tarkistetaan löytyykö tiedostopolku.
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                try
+                {
+                    List<string[]> data = LueCSVtiedosto(filePath, Encoding.UTF8);
+                    Taydenna_ListView_Nakyma(data);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Tiedoston lukeminen epäonnistui: " + ex.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Tiedostopolkua ei löydy tai se on tyhjä.");
+            }
+        }
     }
-
 }
+
+
+
