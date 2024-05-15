@@ -23,8 +23,8 @@ using Microsoft.Win32;
 
 namespace InventoryManagement
 //Tommi Villanen Ohjelmoinnin näyttö 12.04.2024
-//Tommi Villanen Ohjelmistokehityksen näyttö
-//Windows-työpöytä sovellus, joka mahdollistaa jatkuvan inventaarion, liitettynä Sharepoint-tietokantaan.
+//Tommi Villanen Ohjelmistokehityksen näyttö 15.5.2024
+//Windows-työpöytä sovellus, joka mahdollistaa jatkuvan inventaarion, liitettynä jatkossa Sharepoint-tietokantaan.
 
 {
     public partial class MainWindow : Window
@@ -221,7 +221,7 @@ namespace InventoryManagement
 
                         // Tarkastetaan, onko rivillä vähintään kaksi elementtiä: Nimike ja Saldo
                         // Huom! Jatkossa mahdollisesti lisättävä elementtejä esim. hinta
-                        // Lisättiin kentät 'koodi' ja 'yksikkö'
+                        // Lisättiin kentät 'koodi' ja 'yksikkö' ja myös hälytysraja.
                         if (arvot.Length >= 5)
                         {
                             data.Add(arvot);
@@ -345,10 +345,10 @@ namespace InventoryManagement
             {
                 if (int.TryParse(NimikeSaldoTextBox.Text, out int Vahennys))
                 {
-                    // Get the selected item
+                    // Valitaan rivi.
                     Nimike selectedNimike = (Nimike)Inventaario_Lista.SelectedItem;
 
-                    // Ensure saldo is greater than or equal to the reduction
+                    // Varmistetaan, että saldo on isompi tai vähintään sama, kuin vähennys.
                     if (selectedNimike.Quantity >= Vahennys)
                     {
                         // Vähennetään syötetty saldo nykyisestä saldosta.

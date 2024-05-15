@@ -1,86 +1,86 @@
 Koodi;Nimike;Saldo;YksikkÃ¶;HÃ¤lytysraja
-901122;Mänty 32*100mm;1224;m;
-901111;LAUTA 19x100;14025;m;
-901116;MÄNTY 47X 100 MM  /;2115;m;
-;75*100mm;22;m;
-PUUMERKKI;Välipuu 1000 x 100 x 47 mm;539;kpl;
-PUUMERKKI;Välipuu 1000 x 100 x 32 mm;660;kpl;
-PUUMERKKI;Välipuu 1150 x 100 x 47 mm;440;kpl;
-PUUMERKKI;Välipuu 1150 x 100 x 32 mm;660;kpl;
-PUUMERKKI;Välipuu 1230 x 100 x 47 mm;440;kpl;
-PUUMERKKI;Välipuu 1230 x 100 x 32 mm;660;kpl;
-PUUMERKKI;Sahattu 32 x 100 x 100 mm;6200;kpl;
-PUUMERKKI;Sahattu 75 x 100 x 100 mm;2500;kpl;
-PUUMERKKI;Sahattu 75 x 100 x 250 mm;1700;kpl;
-PUUMERKKI;Sahattu 75 x 100 x 300 mm;900;kpl;
-;Rullanaula 60*2,5;2;ltk;
-;Hakanen Q-sarja 63x11 Senco ;1;ltk;
-;RUUVI 5*35;950;ltk;
-;RUUVI 5*80;300;kpl;
-;RUUVI 5,0X100;230;kpl;
-;Rullnanaula 50*2,1 Sileä;0;ltk;
-;Rullnanaula 50*2,1 kirkas kampa;2;ltk;
-;25052A KÄSIKIRISTE 450mm 20my 300m valk;0;rul;
-922123;MUOVIKELMU 0.09x1500x3000 MM KIRKAS;0;kg;
-9600890;MUOVIKELMU 0.07X6000MM VALKOINEN RU;0;kg;
-922125;MUOVIKELMU 0.05x2500/5000 MM KIRKAS  ;0;kg;
-926503;STYROX REUNASUOJA 65x65x10 MM      ;0;kpl;
-926550;STYROX REUNASUOJA 65x65x30MM;420;kpl;
-903352;50*60*240mm;3000;kpl;
-9604202;ÄLÄ NOSTA TÄSTÄ TEIPPI;1188;rul;
-;ÄLÄ SIDO PÄÄLTÄ;0;rul;
-;VIESSMANN TEIPPI 50mm;1512;rul;
-;Deli alusta 60 (66x74);15;kpl;
-;Deli alusta 90 (94X74);15;kpl;
-;Deli alusta 120 (126X74);15;kpl;
-;Deli katto 60;0;kpl;
-;Deli katto 90;0;kpl;
-;Deli katto 120;0;kpl;
-;PI-PÄÄDYT 78 X 142;0;kpl;
-;PI-PÄÄDYT 78 X 138;0;kpl;
-;PI-PÄÄDYT 74 X 142;0;kpl;
-;Aida alusta 60 (66X78);10;kpl;
-;Aida alusta 90 (94X78);10;kpl;
-;Aida alusta 90 (98X78);10;kpl;
-;Aida alusta 120 (126X78);10;kpl;
-;LUXO 5 OV;5;kpl;
-;LUXO 4 OV;8;kpl;
-;LUXO 3 OV;8;kpl;
-;LUXO 2 OV;4;kpl;
-;LUXO 1 OV;2;kpl;
-;ALLAS 192-375 (390X200);2;kpl;
-;ALLAS 192-250 (268X200);2;kpl;
-;ALLAS 192-188 (205X200);0;kpl;
-;ICONIC 250;0;kpl;
-;ICONIC 188;0;kpl;
-;LOUKKARI-188 (205X123);0;kpl;
-;LOUKKARI-250 (268X123);0;kpl;
-;LOUKKARI-375 (390X123);0;kpl;
-;RI-375 (390X121);0;kpl;
-;KOMBI-375;0;kpl;
-;375-ALUSTA (390X113);0;kpl;
-;250-ALUSTA (268X113);0;kpl;
-;188-ALUSTA (205X116);5;kpl;
-;125-ALUSTA (140X116);1;kpl;
-;PÄÄTYALLAS 113X196;6;kpl;
-;PÄÄTYALLAS 113X156;1;kpl;
-;PÄÄTYALLAS (YLÄPUTKITUS) 150X196;2;kpl;
-;PÄÄTYALLAS (YLÄPUTKITUS) 150X156;1;kpl;
-;PÄÄTYALLAS 123X196;0;kpl;
-;ALLAS 152-375 (390X160);0;kpl;
-;ALLAS 152-250 (268X160);0;kpl;
-;ALLAS 152-188 (205X160);0;kpl;
-;SV 178-CE (198X140);0;kpl;
-;SV 188-CE (205X140);0;kpl;
-;SV 198-CE (219X140);1;kpl;
-;SV 250-CE (268X140);0;kpl;
-;RI-LASIOVILAATIKKO;0;kpl;
-;PÄÄTY 192 X 107;18;kpl;
-;PÄÄTY 113 X 107;18;kpl;
-;PÄÄTY 150 X 107;6;kpl;
-;PÄÄTY 152 X 107;0;kpl;
-;PÄÄTY 192 X 163;0;kpl;
-926305;;0;kpl;
-926306;;665;kpl;
-926313;;480;kpl;
-926328;;100;kpl;
+901122;Mï¿½nty 32*100mm;1224;m;0
+901111;LAUTA 19x100;14025;m;0
+901116;Mï¿½NTY 47X 100 MM  /;2115;m;0
+;75*100mm;122;m;0
+PUUMERKKI;Vï¿½lipuu 1000 x 100 x 47 mm;539;kpl;0
+PUUMERKKI;Vï¿½lipuu 1000 x 100 x 32 mm;660;kpl;0
+PUUMERKKI;Vï¿½lipuu 1150 x 100 x 47 mm;440;kpl;0
+PUUMERKKI;Vï¿½lipuu 1150 x 100 x 32 mm;660;kpl;0
+PUUMERKKI;Vï¿½lipuu 1230 x 100 x 47 mm;440;kpl;0
+PUUMERKKI;Vï¿½lipuu 1230 x 100 x 32 mm;660;kpl;0
+PUUMERKKI;Sahattu 32 x 100 x 100 mm;6200;kpl;0
+PUUMERKKI;Sahattu 75 x 100 x 100 mm;2500;kpl;0
+PUUMERKKI;Sahattu 75 x 100 x 250 mm;1700;kpl;0
+PUUMERKKI;Sahattu 75 x 100 x 300 mm;900;kpl;0
+;Rullanaula 60*2,5;2;ltk;0
+;Hakanen Q-sarja 63x11 Senco ;1;ltk;0
+;RUUVI 5*35;950;ltk;0
+;RUUVI 5*80;300;kpl;0
+;RUUVI 5,0X100;230;kpl;0
+;Rullnanaula 50*2,1 Sileï¿½;0;ltk;0
+;Rullnanaula 50*2,1 kirkas kampa;2;ltk;0
+;25052A Kï¿½SIKIRISTE 450mm 20my 300m valk;0;rul;0
+922123;MUOVIKELMU 0.09x1500x3000 MM KIRKAS;0;kg;0
+9600890;MUOVIKELMU 0.07X6000MM VALKOINEN RU;0;kg;0
+922125;MUOVIKELMU 0.05x2500/5000 MM KIRKAS  ;0;kg;0
+926503;STYROX REUNASUOJA 65x65x10 MM      ;0;kpl;0
+926550;STYROX REUNASUOJA 65x65x30MM;420;kpl;0
+903352;50*60*240mm;3000;kpl;0
+9604202;ï¿½Lï¿½ NOSTA Tï¿½STï¿½ TEIPPI;1188;rul;0
+;ï¿½Lï¿½ SIDO Pï¿½ï¿½LTï¿½;0;rul;0
+;VIESSMANN TEIPPI 50mm;1512;rul;0
+;Deli alusta 60 (66x74);15;kpl;0
+;Deli alusta 90 (94X74);15;kpl;0
+;Deli alusta 120 (126X74);15;kpl;0
+;Deli katto 60;0;kpl;0
+;Deli katto 90;0;kpl;0
+;Deli katto 120;0;kpl;0
+;PI-Pï¿½ï¿½DYT 78 X 142;0;kpl;0
+;PI-Pï¿½ï¿½DYT 78 X 138;0;kpl;0
+;PI-Pï¿½ï¿½DYT 74 X 142;0;kpl;0
+;Aida alusta 60 (66X78);10;kpl;0
+;Aida alusta 90 (94X78);10;kpl;0
+;Aida alusta 90 (98X78);10;kpl;0
+;Aida alusta 120 (126X78);10;kpl;0
+;LUXO 5 OV;5;kpl;0
+;LUXO 4 OV;8;kpl;0
+;LUXO 3 OV;8;kpl;0
+;LUXO 2 OV;4;kpl;0
+;LUXO 1 OV;2;kpl;0
+;ALLAS 192-375 (390X200);2;kpl;0
+;ALLAS 192-250 (268X200);2;kpl;0
+;ALLAS 192-188 (205X200);0;kpl;0
+;ICONIC 250;0;kpl;0
+;ICONIC 188;0;kpl;0
+;LOUKKARI-188 (205X123);0;kpl;0
+;LOUKKARI-250 (268X123);0;kpl;0
+;LOUKKARI-375 (390X123);0;kpl;0
+;RI-375 (390X121);0;kpl;0
+;KOMBI-375;0;kpl;0
+;375-ALUSTA (390X113);0;kpl;0
+;250-ALUSTA (268X113);0;kpl;0
+;188-ALUSTA (205X116);5;kpl;0
+;125-ALUSTA (140X116);1;kpl;0
+;Pï¿½ï¿½TYALLAS 113X196;6;kpl;0
+;Pï¿½ï¿½TYALLAS 113X156;1;kpl;0
+;Pï¿½ï¿½TYALLAS (YLï¿½PUTKITUS) 150X196;2;kpl;0
+;Pï¿½ï¿½TYALLAS (YLï¿½PUTKITUS) 150X156;1;kpl;0
+;Pï¿½ï¿½TYALLAS 123X196;0;kpl;0
+;ALLAS 152-375 (390X160);0;kpl;0
+;ALLAS 152-250 (268X160);0;kpl;0
+;ALLAS 152-188 (205X160);0;kpl;0
+;SV 178-CE (198X140);0;kpl;0
+;SV 188-CE (205X140);0;kpl;0
+;SV 198-CE (219X140);1;kpl;0
+;SV 250-CE (268X140);0;kpl;0
+;RI-LASIOVILAATIKKO;0;kpl;0
+;Pï¿½ï¿½TY 192 X 107;18;kpl;0
+;Pï¿½ï¿½TY 113 X 107;18;kpl;0
+;Pï¿½ï¿½TY 150 X 107;6;kpl;0
+;Pï¿½ï¿½TY 152 X 107;0;kpl;0
+;Pï¿½ï¿½TY 192 X 163;0;kpl;0
+926305;;0;kpl;0
+926306;;665;kpl;0
+926313;;480;kpl;0
+926328;;100;kpl;0

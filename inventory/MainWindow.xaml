@@ -67,7 +67,7 @@
         <TextBlock HorizontalAlignment="Left" Margin="133,19,0,0" TextWrapping="Wrap" Text="NIMIKE" VerticalAlignment="Top" RenderTransformOrigin="-0.115,0.519" Width="78" Height="21"/>
         <TextBlock HorizontalAlignment="Left" Margin="484,19,0,0" TextWrapping="Wrap" Text="SALDO" VerticalAlignment="Top" Height="21" Width="50"/>
         <TextBlock HorizontalAlignment="Left" Margin="59,19,0,0" TextWrapping="Wrap" Text="KOODI" VerticalAlignment="Top" RenderTransformOrigin="1.204,0.519" Height="21" Width="69"/>
-        <TextBlock HorizontalAlignment="Left" Margin="560,19,0,0" TextWrapping="Wrap" Text="YKSIKKÖ" VerticalAlignment="Top" Height="21" Width="60"/>
+        <TextBlock HorizontalAlignment="Left" Margin="560,19,0,0" TextWrapping="Wrap" Text="YKSIKKÖ" VerticalAlignment="Top" Height="21" Width="72"/>
         <TextBlock HorizontalAlignment="Center" Margin="0,19,0,0" TextWrapping="Wrap" Text="MUUTA SALDOA" VerticalAlignment="Top" Grid.Column="1" Height="21" Width="118" />
         <Image HorizontalAlignment="Left" Height="1604" Margin="0,10,0,0" VerticalAlignment="Top" Width="52" Source="/800px-Transvalin_logo.png" RenderTransformOrigin="0.5,0.5" Grid.RowSpan="3">
             <Image.RenderTransform>
